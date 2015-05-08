@@ -1,0 +1,10 @@
+{
+  "name": "MyNewsCMS",
+  "version": "0.0.1",
+  "description": "Project.",
+  "main": "server.js",
+  "author": "Dr Emixam",
+  "dependencies": {
+    "express": "^4.6.1"
+  }
+}

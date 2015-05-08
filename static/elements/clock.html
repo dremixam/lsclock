@@ -1,0 +1,82 @@
+<link rel="import" href="/libs/polymer/polymer.html">
+
+<polymer-element name="gta-clock" attributes="lang">
+  <template>
+    <div class="day">{{day}}</div>
+    <div class="time"><span>{{d_hours}}</span>:<span>{{d_minutes}}</span>
+    </div>
+    <style>
+      :host {
+        display: inline-block;
+      }
+      span {
+        font-feature-settings: 'lnum';
+        /* vendor-prefixes */
+        -moz-font-feature-settings: 'lnum=1';
+        -ms-font-feature-settings: 'lnum';
+        -webkit-font-feature-settings: 'lnum';
+        -o-font-feature-settings: 'lnum';
+        font-variant-numeric: lining-nums;
+      }
+      div.time {
+        font-size: 1.5em;
+      }
+    </style>
+  </template>
+  <script>
+    dayOfWeek = {
+      fr: ['Samedi', 'Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi'],
+      en: ['Satursday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+    };
+    Polymer('gta-clock', {
+      hours: '00',
+      minutes: '00',
+      seconds: '00',
+      d_hours: '00',
+      d_minutes: '00',
+      d_seconds: '00',
+      lang: 'en',
+      day: '',
+      lastTimestamp: '0',
+      ready: function () {
+        this.async(this.updateDate, null, 100);
+      },
+      updateDate: function () {
+        var gtaNow = (new Date().getTime()) * 30;
+        if (gtaNow > this.lastTimestamp) {
+          this.lastTimestamp = gtaNow;
+          this.date = new Date(gtaNow);
+          this.day = dayOfWeek[this.lang][this.date.getUTCDay()];
+          this.hours = this.date.getUTCHours();
+          this.minutes = this.date.getUTCMinutes();
+          this.seconds = this.date.getUTCSeconds();
+        }
+        this.async(this.updateDate, null, 100);
+      },
+      hoursChanged: function (oldValue, newValue) {
+        this.fire('hourUpdated', {
+          hour: newValue
+        });
+        if (newValue.toString().length < 2) {
+          this.d_hours = '0' + this.hours;
+        } else {
+          this.d_hours = this.hours;
+        }
+      },
+      minutesChanged: function (oldValue, newValue) {
+        if (newValue.toString().length < 2) {
+          this.d_minutes = '0' + this.minutes;
+        } else {
+          this.d_minutes = this.minutes;
+        }
+      },
+      secondsChanged: function (oldValue, newValue) {
+        if (newValue.toString().length < 2) {
+          this.d_seconds = '0' + this.seconds;
+        } else {
+          this.d_seconds = this.seconds;
+        }
+      }
+    });
+  </script>
+</polymer-element>

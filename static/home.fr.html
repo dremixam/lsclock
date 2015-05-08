@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Los Santos Clock :Quelle heure est-il &agrave; Los Santos ?</title>
+  <!-- 1. Load platform.js for polyfill support. -->
+  <script src="/libs/platform/platform.js"></script>
+  <link rel="import" href="/libs/polymer/polymer.html">
+  <link rel="import" href="elements/clock.html">
+  <link href='//fonts.googleapis.com/css?family=Yellowtail' rel='stylesheet' type='text/css'>
+  <link href='//fonts.googleapis.com/css?family=Raleway:100' rel='stylesheet' type='text/css'>
+  <style>
+    html {
+      height: 100%;
+    }
+    h1 {
+      font-family: 'Yellowtail', cursive;
+      font-size: 6em;
+      text-align: center;
+      color: #fff;
+      text-shadow: #000 2px 1px 8px;
+      position: relative;
+    }
+    body {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    gta-clock {
+      font-family: 'Raleway', sans-serif;
+      text-align: center;
+      font-size: 5em;
+      text-align: center;
+      color: #fff;
+      text-shadow: #000 2px 1px 8px;
+      margin: 0 1em 1em;
+      position: relative;
+    }
+    #mainBackground {
+      -webkit-filter: blur(10px);
+      filter: url(/#headerblur);
+      position: absolute;
+      top: -20px;
+      bottom: -20px;
+      right: -20px;
+      left: -20px;
+      background-size: cover;
+      background-repeat: no-repeat;
+      -webkit-transition: background 60s linear;
+      -moz-transition: background 60s linear;
+      -o-transition: background 60s linear;
+      transition: background 60s linear;
+    }
+  </style>
+  <script>
+    var images = new Array();
+    for (i = 0; i < 24; i++) {
+      images[i] = new Image();
+      images[i].src = '/backgrounds/' + i + '.jpg';
+    }
+  </script>
+</head>
+
+<body>
+  <div id="mainBackground">
+    <svg height="0" xmlns="http://www.w3.org/2000/svg">
+      <filter id="headerblur" x="-5%" y="-5%" width="110%" height="110%">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="10"></feGaussianBlur>
+      </filter>
+    </svg>
+  </div>
+  <h1>Quelle heure est-il &agrave;<br>Los Santos ?</h1>
+  <gta-clock lang="fr"></gta-clock>
+
+
+  <script>
+    document.querySelector('gta-clock').addEventListener('hourUpdated', function (e) {
+      console.log(e.type, e.detail.hour); // "ouch" "That hurt!"
+      var backgroundImg = '/backgrounds/' + e.detail.hour + '.jpg';
+      document.getElementById('mainBackground').style.backgroundImage = 'url(' + backgroundImg + ')';
+    });
+  </script>
+
+</body>
+
+</html>
